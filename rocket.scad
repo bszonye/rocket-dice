@@ -1,7 +1,3 @@
-echo(21/PI);
-echo(11*PI/21);
-echo(21/PI/11);
-
 layer = 0.2;
 
 height = 24;
@@ -13,9 +9,11 @@ module die(h=height, center=false) {
     apothem = h/4;
     module pip(y, z) {
         side = apothem/sin(60);
-        r = layer * ceil(side/8 / layer);  // quantize to layer height
+        rx = (side - 4*layer) / 6;
+        rq = layer * floor(rx/layer);  // quantize to layer height
+        r = rq / cos(30);  // extrapolate to sphere
         x = apothem + r*sin(30);
-        translate([x, y*2*r, z*2*r]) sphere(r);
+        translate([x, y*(2*rq+layer), z*(2*rq+layer)]) sphere(r);
     }
     module pips(n) {
         if (n==1) rotate(30) {
