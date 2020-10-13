@@ -12,11 +12,10 @@ module die(h=height, d=diameter, center=false) {
     module pip(y, z) {
         rx = (edge - 2) / 4;
         rq = layer * floor(rx/layer);  // quantize to layer height
-        r = rq / cos(30);  // extrapolate to sphere
-        x = apothem + r*sin(30);
         dz = 2*rq + layer;
         dy = dz * tan(30);
-        translate([x, y*dy, z*dz]) sphere(r);
+        translate([apothem-rq/2, y*dy, z*dz]) rotate([0, 90, 0])
+            cylinder(h=rq, r1=0, r2=2*rq);
     }
     module pips(n) {
         if (n==1) rotate(90) {
@@ -64,7 +63,6 @@ module die(h=height, d=diameter, center=false) {
 module rocket(h=height, d=diameter, center=false) {
     apothem = d/2;  // hexagon center to face
     edge = apothem/sin(60);  // hexagon edge / center to vertex
-    echo(2*apothem, 2*edge);
     module fin() {
         fd = h/20;
         translate([0, 0, -h/2]) rotate([90, 0, 0]) intersection() {
