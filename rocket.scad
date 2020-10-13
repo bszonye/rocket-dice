@@ -10,12 +10,16 @@ module die(h=height, d=diameter, center=false) {
     apothem = d/2;  // hexagon center to face
     edge = apothem/sin(60);  // hexagon edge / center to vertex
     module pip(y, z) {
-        rx = (edge - 2) / 4;
-        rq = layer * floor(rx/layer);  // quantize to layer height
+        // pip radius
+        rp = (edge - 2) / 4;
+        rq = layer * floor(rp/layer);  // quantize to layer height
         dz = 2*rq + layer;
         dy = dz * tan(30);
-        translate([apothem-rq/2, y*dy, z*dz]) rotate([0, 90, 0])
-            cylinder(h=rq, r1=0, r2=2*rq);
+        // pip depth
+        a = 45;  // pip angle
+        dp = rq * sin(a);
+        translate([apothem-dp, y*dy, z*dz]) rotate([0, 90, 0])
+            cylinder(h=2*dp, r1=0, r2=2*rq, $fa=15, $fs=layer);
     }
     module pips(n) {
         if (n==1) rotate(90) {
@@ -85,4 +89,4 @@ module rocket_die(h=height, d=diameter, center=false) {
     }
 }
 
-rocket_die(center=true, $fa=1, $fs=1/4);
+rocket_die(center=true, $fa=3, $fs=layer);
