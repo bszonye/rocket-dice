@@ -9,11 +9,13 @@ module die(h=height, center=false) {
     apothem = h/4;
     module pip(y, z) {
         side = apothem/sin(60);
-        rx = (side - 4*layer) / 6;
+        rx = (side - 2) / 4;
         rq = layer * floor(rx/layer);  // quantize to layer height
         r = rq / cos(30);  // extrapolate to sphere
         x = apothem + r*sin(30);
-        translate([x, y*(2*rq+layer), z*(2*rq+layer)]) sphere(r);
+        dz = 2*rq + layer;
+        dy = dz * tan(30);
+        translate([x, y*dy, z*dz]) sphere(r);
     }
     module pips(n) {
         if (n==1) rotate(30) {
